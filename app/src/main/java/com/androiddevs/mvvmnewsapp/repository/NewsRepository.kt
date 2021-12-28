@@ -2,7 +2,9 @@ package com.androiddevs.mvvmnewsapp.repository
 
 import android.app.DownloadManager
 import com.androiddevs.mvvmnewsapp.api.RetrofitInstance
+import com.androiddevs.mvvmnewsapp.db.ArticleDao
 import com.androiddevs.mvvmnewsapp.db.ArticleDatabase
+import com.androiddevs.mvvmnewsapp.models.Article
 
 class NewsRepository(
     val db: ArticleDatabase
@@ -13,6 +15,14 @@ class NewsRepository(
 
     suspend fun searchNews(searchQuery: String, pageNumber: Int)=
         RetrofitInstance.api.searchForNews(searchQuery, pageNumber)
+
+
+    //Saved News
+    suspend fun upsert (article: Article) = db.getArticleDao().upsert(article)
+    fun getSavedNews() = db.getArticleDao().getAllArticles()
+
+    //for Delete from room db saved news
+    suspend fun deleteArticle(article: Article) = db.getArticleDao().deleteArticle(article)
 
 
 }
